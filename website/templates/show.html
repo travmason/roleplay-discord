@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block title %}Report{% endblock %} {% block content
+    %}
+      <h3>Conversations</h3>
+      
+      <table class="table-striped table-bordered">
+         <thead class="thead-light">
+            <tr>
+               <th>Session ID</th>
+               <th>Date</th>
+               <th>Prompt</th>
+               <th>User ID</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for convo in conversations %}
+               <tr>
+                  <td>{{ convo.session_id }}</td>
+                  <td>{{ convo.date }}</td>
+                  <td>{{ convo.prompt }}</td>
+                  <td>{{ convo.user_id }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+{% endblock %}
