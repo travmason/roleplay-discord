@@ -24,26 +24,16 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    brooklyn_99_quotes = [
-        'I\'m the human form of the 💯 emoji.',
-        'Bingpot!',
-        (
-            'Cool. Cool cool cool cool cool cool cool, '
-            'no doubt no doubt no doubt no doubt.'
-        ),
-    ]
-
     user_input = message.content
-    bot.conversation.append('Human: %s' % user_input)
-    text_block = '\n'.join(bot.conversation)
+    bot.conversation_text.append('Human: %s' % user_input)
+    text_block = '\n'.join(bot.conversation_text)
     prompt = 'The following is a conversation with an AI assistant called Daniel. The assistant exhibits symptoms of depression and has a serious mental health issue. The assistant is reluctant to talk about their condition at first unless someone mentions their family or their work.'
-    open_file('prompt_init.txt').replace('<<BLOCK>>', text_block)
-    prompt = prompt + '\nDaniel:'
-    response = gpt3_completion(prompt)
-    print('Daniel: ', response)
-    conversation.append('Daniel: %s' % response)
+    #open_file('prompt_init.txt').replace('<<BLOCK>>', text_block)
+    prompt = prompt + '\n' + text_block + '\nDaniel:'
+    print('prompt before gpt3 is :' + prompt)
+    response = bot.gpt3_completion(prompt)
+    bot.conversation_text.append('Daniel: %s' % response)
 
-    response = bot.gpt3_completion(bot.conversation_text.)
     await message.channel.send(response)
 
 client.run(DISCORD_TOKEN)
