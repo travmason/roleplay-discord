@@ -6,8 +6,13 @@ from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import logging
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 
 LOGLEVEL = os.getenv("LOGLEVEL")
+prompt_version = os.getenv("PROMPT_VERSION")
+
 logging.basicConfig(level=logging.ERROR)
 
 auth = Blueprint('auth', __name__)
@@ -19,7 +24,8 @@ def open_file(filename):
         return infile.read()
 
 def start_conversation(user):
-    prompt = Prompt.query.first()
+    #prompt = Prompt.query.first()
+    prompt = Prompt.query.filter_by(id=prompt_version).first()
     logging.info('prompt: ' + str(prompt.prompt))
 
     conversation = Conversation.query.filter_by(user_id=user.id).order_by(Conversation.con_id.desc()).first()
