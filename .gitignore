@@ -3,3 +3,4 @@ website/__pycache__
 website/gpt3_logs/*
 website/chat.db
 .env
+*.log
