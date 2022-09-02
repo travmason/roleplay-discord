@@ -29,16 +29,18 @@ consolehandler = logging.StreamHandler()
 consolehandler.setFormatter(formatter)
 logger.addHandler(consolehandler)
 
-logger.info('logging started')
+def open_file(filepath):
+    with open(filepath, 'r', encoding='utf-8') as infile:
+        return infile.read()
 
 client = discord.Client(intents=discord.Intents.default())
 bot = Bot()
 
 @client.event
 async def on_ready():
-    logging.info('%s has connected to Discord!', client.user)
+    logger.info('%s has connected to Discord!', client.user)
     for guild in client.guilds:
-        logging.info('%s (id: %s)\n', guild.name, guild.id)
+        logger.info('%s (id: %s)\n', guild.name, guild.id)
 
 @client.event
 async def on_message(message):
@@ -48,14 +50,14 @@ async def on_message(message):
     user_input = message.content
     bot.conversation_text.append('Human: %s' % user_input)
     text_block = '\n'.join(bot.conversation_text)
-    prompt = 'The following is a conversation with an AI assistant called Daniel. The assistant exhibits symptoms of depression and has a serious mental health issue. The assistant is reluctant to talk about their condition at first unless someone mentions their family or their work.'
-    #open_file('prompt_init.txt').replace('<<BLOCK>>', text_block)
-    prompt = prompt + '\n' + text_block + '\nDaniel:'
-    logging.info('Prompt: ' + prompt)
+    prompt = open_file('website\\prompt_init.txt').replace('<<BLOCK>>', text_block)
+    prompt = prompt + '\nDaniel:'
+    logger.info('Prompt: ' + prompt)
     response = bot.gpt3_completion(prompt)
     bot.conversation_text.append('Daniel: %s' % response)
-#    logging.info('\n'.join(map(str, bot.conversation_text)))
-
+#    logger.info('\n'.join(map(str, bot.conversation_text)))
+    logger.info('Response: ' + response)
+    
     await message.channel.send(response)
 
 client.run(DISCORD_TOKEN, log_handler=None)
