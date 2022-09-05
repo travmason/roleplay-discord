@@ -4,7 +4,7 @@ import logging
 import logging.handlers
 import discord
 from dotenv import load_dotenv
-import random
+import uuid
 from website.daniel import Bot  
 
 load_dotenv()
@@ -55,7 +55,6 @@ async def on_message(message):
     logger.info('Prompt: ' + prompt)
     response = bot.gpt3_completion(prompt)
     bot.conversation_text.append('Daniel: %s' % response)
-#    logger.info('\n'.join(map(str, bot.conversation_text)))
     logger.info('Response: ' + response)
     
     await message.channel.send(response)
